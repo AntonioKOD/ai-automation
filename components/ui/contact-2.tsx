@@ -29,12 +29,33 @@ export const Contact2 = ({
     message: ""
   });
 
+  const [isLoading, setIsLoading] = useState(false);
+  const [successMessage, setSuccessMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
+    // Clear messages when user starts typing
+    if (successMessage) setSuccessMessage("");
+    if (errorMessage) setErrorMessage("");
+  };
+
+  const resetForm = () => {
+    setFormData({
+      firstName: "",
+      lastName: "",
+      email: "",
+      subject: "",
+      message: ""
+    });
   };
 
   const handleSubmit = async () => {
+    setIsLoading(true);
+    setSuccessMessage("");
+    setErrorMessage("");
+
     try {
       const response = await fetch("/api/send", {
         method: "POST",
@@ -49,9 +70,23 @@ export const Contact2 = ({
       }
 
       const data = await response.json();
-      console.log("Email sent successfully:", data);
+      setSuccessMessage("Message sent successfully! We'll get back to you within 24 hours.");
+      resetForm();
+      
+      // Clear success message after 5 seconds
+      setTimeout(() => {
+        setSuccessMessage("");
+      }, 5000);
     } catch (error) {
       console.error("Error sending email:", error);
+      setErrorMessage("Failed to send message. Please try again later.");
+      
+      // Clear error message after 5 seconds
+      setTimeout(() => {
+        setErrorMessage("");
+      }, 5000);
+    } finally {
+      setIsLoading(false);
     }
   }
   return (
@@ -91,29 +126,41 @@ export const Contact2 = ({
           </div>
           
           <div className="mx-auto flex max-w-screen-md flex-col gap-6 rounded-lg border p-10 relative z-[60] bg-black/80 backdrop-blur-md">
+            {successMessage && (
+              <div className="rounded-lg bg-green-500/20 border border-green-500/50 p-4 text-green-400 text-sm">
+                {successMessage}
+              </div>
+            )}
+            {errorMessage && (
+              <div className="rounded-lg bg-red-500/20 border border-red-500/50 p-4 text-red-400 text-sm">
+                {errorMessage}
+              </div>
+            )}
             <div className="flex gap-4">
               <div className="grid w-full items-center gap-1.5">
                 <Label htmlFor="firstname">First Name</Label>
-                <Input type="text" id="firstname" placeholder="First Name" name='firstName' value={formData.firstName} onChange={handleChange}/>
+                <Input type="text" id="firstname" placeholder="First Name" name='firstName' value={formData.firstName} onChange={handleChange} disabled={isLoading}/>
               </div>
               <div className="grid w-full items-center gap-1.5">
                 <Label htmlFor="lastname">Last Name</Label>
-                <Input type="text" id="lastname" placeholder="Last Name" name='lastName' value={formData.lastName} onChange={handleChange} />
+                <Input type="text" id="lastname" placeholder="Last Name" name='lastName' value={formData.lastName} onChange={handleChange} disabled={isLoading} />
               </div>
             </div>
             <div className="grid w-full items-center gap-1.5">
               <Label htmlFor="email">Email</Label>
-              <Input type="email" id="email" placeholder="Email" name='email' value={formData.email} onChange={handleChange} />
+              <Input type="email" id="email" placeholder="Email" name='email' value={formData.email} onChange={handleChange} disabled={isLoading} />
             </div>
             <div className="grid w-full items-center gap-1.5">
               <Label htmlFor="subject">Subject</Label>
-              <Input type="text" id="subject" placeholder="Subject" name='subject' value={formData.subject} onChange={handleChange} />
+              <Input type="text" id="subject" placeholder="Subject" name='subject' value={formData.subject} onChange={handleChange} disabled={isLoading} />
             </div>
             <div className="grid w-full gap-1.5">
               <Label htmlFor="message">Message</Label>
-              <Textarea placeholder="Type your message here." id="message" name='message' value={formData.message} onChange={handleChange} />
+              <Textarea placeholder="Type your message here." id="message" name='message' value={formData.message} onChange={handleChange} disabled={isLoading} />
             </div>
-            <Button className="w-full" onClick={handleSubmit}>Send Message</Button>
+            <Button className="w-full" onClick={handleSubmit} disabled={isLoading}>
+              {isLoading ? "Sending..." : "Send Message"}
+            </Button>
           </div>
         </div>
       </div>
