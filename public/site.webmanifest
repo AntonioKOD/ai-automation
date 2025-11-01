@@ -1,0 +1,25 @@
+{
+  "name": "BuildQuick",
+  "short_name": "BuildQuick",
+  "description": "Build Fast. Automate Smarter. AI automation and modern web engineering for businesses.",
+  "icons": [
+    {
+      "src": "/buildquicklogo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/favicon.ico",
+      "sizes": "48x48",
+      "type": "image/x-icon"
+    }
+  ],
+  "theme_color": "#000000",
+  "background_color": "#000000",
+  "display": "standalone",
+  "orientation": "portrait",
+  "start_url": "/",
+  "scope": "/"
+}
+
