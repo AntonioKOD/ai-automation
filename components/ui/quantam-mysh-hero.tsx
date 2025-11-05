@@ -60,8 +60,6 @@ const HeroSection = () => {
     </div>
 
     <div>
-      <h1 className='text-4xl text-center font-extrabold tracking-tight lg:text-5xl'>What We Build</h1>
-
       <div className="w-full min-h-screen flex items-center" id='about'>
   <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
     {/* Grid: 1 col on mobile -> 2 on md -> 3 on xl */}
