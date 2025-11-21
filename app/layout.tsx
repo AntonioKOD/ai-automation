@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Navbar from "../components/navbar";
 import { AnimatedBackground } from "@/components/animated-background";
+import {GoogleAnalytics} from "@next/third-parties/google";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -112,6 +113,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased relative min-h-screen bg-transparent`}
       >
         <AnimatedBackground />
+        <GoogleAnalytics gaId="G-YTTR917GTG" />
         <div className="relative z-10 min-h-screen">
           <Navbar />
           {children}
